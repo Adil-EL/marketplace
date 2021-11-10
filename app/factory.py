@@ -37,7 +37,7 @@ def create_app():
 
     @app.route('/')
     def index():
-        return "In progress ... "
+        return "تبارك الله على السي أمين "
 
 
     return app
