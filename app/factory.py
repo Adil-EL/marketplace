@@ -1,7 +1,7 @@
 import os
 
 
-from flask import Flask
+from flask import Flask, render_template
 from flask.json import JSONEncoder
 from flask_cors import  CORS
 from bson import json_util, ObjectId
@@ -37,7 +37,6 @@ def create_app():
 
     @app.route('/')
     def index():
-        return "تبارك الله على السي أمين "
-
+        return render_template('index.html')
 
     return app
