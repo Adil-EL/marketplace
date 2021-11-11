@@ -11,7 +11,7 @@ Create a profetionnal account
 from flask import current_app, g 
 from werkzeug.local import LocalProxy
 
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING, ASCENDING
 
 def get_db():
     """
@@ -41,4 +41,43 @@ def get_laptops():
     laptops = cursor.limit(10)
 
     return list(laptops)
+
+def build_query_sort_project(filters):
+    """
+    Builds the query predicate, 'sort', ansd 'projection' 
+    attributes for a given filters dictionary. 
+    """
+    query = {}
+    sort = [("price"), DESCENDING]
+    project = [{'title':1, 'price':1, 'source':1, '_id':0}]
+
+    if filters :
+        if "source" in filters:
+            query = {"$source": {"$in": filters["source"]}}
+            sort = [("price"), DESCENDING]
+            project = {'title':1, 'price':1, 'source':1, '_id':0}
+    
+    return query, sort, project
+
+
+def get_laptops_filtred(filters):
+
+    """
+    Returns a cursor to a list of laptops documents according to 
+    the selected filters
+    """
+
+    query, sort, project = build_query_sort_project(filters)
+
+    if project :
+        cursor  = db.laptops.find(query, project).sort(sort)
+    
+    else:
+        cursor  = db.laptops.find(query).sort(sort)
+    
+    total_num_documents = db.laptops.count_documents(query) 
+    
+    return (total_num_documents, list(cursor))
+
+
 
