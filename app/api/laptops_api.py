@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, redirect
 from app.db import get_laptops,get_laptops_filtred
 
 from flask_cors import CORS
@@ -23,9 +23,17 @@ def api_get_laptops_filters():
 
     filters = {}
     source = request.args.getlist('source')
+    print("\n ************ \n")
+    print(source)
+    print("\n ************ \n")
 
     if source :
         filters['source'] = source
+
+
+    print("\n ************ \n")
+    print(filters)
+    print("\n ************ \n")
 
     total_results,laptops = get_laptops_filtred(filters)
     response = {
@@ -33,4 +41,4 @@ def api_get_laptops_filters():
          'laptops' : laptops
     }
 
-    return jsonify(response)
+    return  jsonify(response)

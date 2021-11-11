@@ -49,13 +49,13 @@ def build_query_sort_project(filters):
     """
     query = {}
     sort = [("price"), DESCENDING]
-    project = [{'title':1, 'price':1, 'source':1, '_id':0}]
+    project = {'title':1,'_id':0}
 
     if filters :
         if "source" in filters:
-            query = {"$source": {"$in": filters["source"]}}
+            query = {"source": {"$in": filters["source"]}}
             sort = [("price"), DESCENDING]
-            project = {'title':1, 'price':1, 'source':1, '_id':0}
+            project = {'title':1, 'price':1, 'url':1,'_id':0}
     
     return query, sort, project
 
@@ -68,15 +68,19 @@ def get_laptops_filtred(filters):
     """
 
     query, sort, project = build_query_sort_project(filters)
+    
+    #query = {"source":{"$in" :["pc maroc"]}}
+    
+    sort = "price",DESCENDING
 
     if project :
-        cursor  = db.laptops.find(query, project).sort(sort)
+        cursor  = db.laptops.find(query, project).sort("price",DESCENDING)
     
     else:
-        cursor  = db.laptops.find(query).sort(sort)
+        cursor  = db.laptops.find() #.sort(sort)
     
-    total_num_documents = db.laptops.count_documents(query) 
-    
+    total_num_documents = 20 #db.laptops.count_documents(query) 
+
     return (total_num_documents, list(cursor))
 
 
