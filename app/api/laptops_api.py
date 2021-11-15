@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, redirect
-from app.db import get_laptops,get_laptops_filtred
+from app.db import get_laptops,get_laptops_filtred, get_laptops_sorted
 
 from flask_cors import CORS
 
@@ -36,6 +36,48 @@ def api_get_laptops_filters():
     print("\n ************ \n")
 
     total_results,laptops = get_laptops_filtred(filters)
+    response = {
+        'total_results':total_results,
+         'laptops' : laptops
+    }
+
+    return  jsonify(response)
+
+@laptops_api_v1.route('/order')
+def api_get_laptops_sorted():
+
+    filters = {}
+    #sort_variables = []
+    # directions = []
+    sort_variables = str(request.args.getlist('sort'))
+    sort_variables=sort_variables[2:-2]
+    sort_variables=sort_variables.split(',')
+    print("\n ************ This is it \n")
+    print(sort_variables)
+    # print(directions)
+    print("\n ************ \n")
+    #sort_variables =['price','url']
+
+    # try:
+    #     sort_variables = request.args.getlist('sort')
+    #     sort_variables=sort_variables[2:-2]
+    #     sort_variables=sort_variables.split(',')
+
+
+    # except:
+    #     pass
+    
+    # try :
+    #     directions = request.args.getlist('direction')
+    # except: 
+    #     pass
+ 
+ 
+
+
+
+
+    total_results,laptops = get_laptops_sorted(filters,sort_variables)
     response = {
         'total_results':total_results,
          'laptops' : laptops

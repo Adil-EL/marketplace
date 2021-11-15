@@ -59,7 +59,25 @@ def build_query_sort_project(filters):
     
     return query, sort, project
 
+def build_query_sort_project_2(filters,sort_variables):
+    """
+    Builds the query predicate, 'sort', ansd 'projection' 
+    attributes for a given filters dictionary. 
+    """
+    query = {}
+    sort = [] #[("price", ASCENDING), ("source",DESCENDING)])
+    for variable in sort_variables:
+        sort.append((variable,DESCENDING))
+    project = {'title':1, 'price':1, 'url':1,'_id':0}
 
+    if filters :
+        if "source" in filters:
+            query = {"source": {"$in": filters["source"]}}
+            project = {'title':1, 'price':1, 'url':1,'_id':0}
+    
+    return query, sort, project
+
+#-----------------------------------Filters ----------------------------------
 def get_laptops_filtred(filters):
 
     """
@@ -71,7 +89,7 @@ def get_laptops_filtred(filters):
     
     #query = {"source":{"$in" :["pc maroc"]}}
     
-    sort = "price",DESCENDING
+
 
     if project :
         cursor  = db.laptops.find(query, project).sort("price",DESCENDING)
@@ -84,4 +102,25 @@ def get_laptops_filtred(filters):
     return (total_num_documents, list(cursor))
 
 
+#-------------------------------Sort --------------------------------------
+def get_laptops_sorted(filters,sort_variables):
+
+    """
+    Returns a cursor to a list of laptops documents according to 
+    the selected filters
+    """
+
+    query, sortt, project = build_query_sort_project_2(filters,sort_variables)
+    
+
+    if project :
+        cursor  = db.laptops.find(query, project).sort(sortt)
+    
+    else:
+        cursor  = db.laptops.find(query).sort(sortt)
+    
+    total_num_documents = cursor.count()
+    #total_num_documents = 20
+
+    return (total_num_documents, list(cursor))
 
