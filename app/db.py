@@ -37,7 +37,7 @@ def get_laptops():
     to be improved ...
     """
     cursor = db.laptops.find()
-    print(cursor)
+    #print(cursor)
     laptops = cursor.limit(10)
 
     return list(laptops)

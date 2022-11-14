@@ -1,7 +1,7 @@
-from flask import Blueprint, request, jsonify, redirect
-from app.db import get_laptops,get_laptops_filtred, get_laptops_sorted
-
+from flask import Blueprint, jsonify, redirect, request
 from flask_cors import CORS
+
+from app.db import get_laptops, get_laptops_filtred, get_laptops_sorted
 
 laptops_api_v1 = Blueprint(
     'laptops_api_v1', 'laptops_api_v1',url_prefix= '/api/v1/laptops')

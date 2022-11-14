@@ -16,4 +16,4 @@ app.config['SECRET_KEY'] = config['PROD']['SECRET_KEY']
 
 if __name__ == "__main__":
 
-    app.run()
+    app.run(debug=True)
